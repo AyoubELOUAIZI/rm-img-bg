@@ -7,11 +7,9 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-# CORS(app, origins=["http://localhost:3000", "https://your-frontend-domain.com"])
 
-# CORS(app)
 # Allow requests from all domains or restrict to your frontend domain
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://your-production-frontend.com"]}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://rembg-client.vercel.app"]}})
 
 
 
