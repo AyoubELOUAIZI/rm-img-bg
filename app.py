@@ -4,18 +4,27 @@ from rembg import remove
 from io import BytesIO
 from PIL import Image
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+
 
 
 app = Flask(__name__)
 
-# Allow requests from all domains or restrict to your frontend domain
-CORS(app, resources={r"/*": {"origins": ["https://removeimagebackground.netlify.app","https://removeimagebackground.site"]}})
+# Initialize CORS 
+CORS(app, resources={r"/*": {"origins": ["https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]}})
+
+# Set up rate limiting (100 requests per minute per client IP)
+limiter = Limiter(get_remote_address, app=app, default_limits=["30 per minute"])
+
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # Limit to 4MB
 
 @app.before_request
 def restrict_origin():
     allowed_origins = ["https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]
     origin = request.headers.get("Origin")
-    print(origin)
+    # print(origin)
     if origin and origin not in allowed_origins:
         return {"error": "Origin not allowed"}, 403
 
