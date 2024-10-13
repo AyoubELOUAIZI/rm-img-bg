@@ -13,7 +13,7 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 
 # Initialize CORS 
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000","https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]}})
+CORS(app, resources={r"/*": {"origins": ["https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]}})
 
 # Set up rate limiting (100 requests per minute per client IP)
 limiter = Limiter(get_remote_address, app=app, default_limits=["30 per minute"])
@@ -22,7 +22,7 @@ app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # Limit to 4MB
 
 @app.before_request
 def restrict_origin():
-    allowed_origins = ["http://localhost:3000","https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]
+    allowed_origins = ["https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]
     origin = request.headers.get("Origin")
     # print(origin)
     if origin and origin not in allowed_origins:
