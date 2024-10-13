@@ -9,9 +9,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Allow requests from all domains or restrict to your frontend domain
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000","https://removeimagebackground.netlify.app","https://removeimagebackground.site"]}})
+CORS(app, resources={r"/*": {"origins": ["https://removeimagebackground.netlify.app","https://removeimagebackground.site"]}})
 
-
+@app.before_request
+def restrict_origin():
+    allowed_origins = ["https://removeimagebackground.netlify.app", "https://removeimagebackground.site"]
+    origin = request.headers.get("Origin")
+    print(origin)
+    if origin and origin not in allowed_origins:
+        return {"error": "Origin not allowed"}, 403
 
 @app.route('/')
 def index():
